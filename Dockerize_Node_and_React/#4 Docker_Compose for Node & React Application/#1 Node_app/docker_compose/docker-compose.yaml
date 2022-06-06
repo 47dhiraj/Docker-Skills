@@ -1,0 +1,14 @@
+version: "3.8"              # yo chai docker compose ko version ho
+services:
+  api:                      # first service lai api naam diyeko
+    build: ./api            # docker-compose uses Dockerfile ko download or make the Docker image for that service # image build garna ko lagi Docker file ko relative path dina parcha (i.e ./api chia Dockerfile ko relative path ho)
+    container_name: api_c   # container ko naam diyeko
+    ports:                  # ports allows us to do port mapping
+      - '4000:4000'         # 
+    volumes:                # hamile container create garda kheri computer ko kun directory or folder ko kura lai mirror or map garni vanera volumes rakhna specify garna parcha
+      - ./api:/app          # api directory or folder is mirrored with app directory on the container
+      - ./app/node_modules  # computer ko ma vayeko node_modules lai chai container ko volumes ma map nagarna ko lagi i.e node_modules lai container ma ignore garna ko lagi yesto gareko ho
+
+      
+
+      

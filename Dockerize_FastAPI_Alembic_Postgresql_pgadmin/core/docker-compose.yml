@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+
+  db:                               # db service
+    container_name: postgresql_db
+    image: postgres                 # docker hub batw postgres batw image download garcha
+    restart: always
+    volumes:
+      - ./data/db:/var/lib/postgresql/data   # mapping or mirroring data in local computer directory(i.e ./data/db) to the container directory(i.e var/lib/postgresql/data)
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=${DB_USER}            # ${DB_USER} vannale .env file vitra vayeko DB_USER variable ho
+      - POSTGRES_PASSWORD=${DB_PASSWORD}    # ${DB_PASSWORD} vannale .env file vitra vayeko DB_PASSWORD variable ho
+      - POSTGRES_DB=${DB_NAME}              # ${DB_NAME} vannale .env file vitra vayeko DB_NAME variable ho
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4         
+    restart: always
+    volumes:
+      - ./data/pgadmin-data:/var/lib/pgadmin     # mapping or mirroring data in local computer directory(i.e ./data/pgadmin-data) to the container directory(i.e var/lib/pgadmin)
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}        # ${PGADMIN_EMAIL} vannale .env file vitra vayeko PGADMIN_EMAIL variable ho
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}  # ${PGADMIN_PASSWORD} vannale .env file vitra vayeko PGADMIN_PASSWORD variable ho
+    ports:
+      - 5050:80
+    depends_on:
+      - db            # pgadmin service le database or db service sanga depend garcha vaneko ho
+  
+  app:
+    container_name: app
+    build: .          # yo app service ko lagi image build garda Dockerfile ko insturctions herera build garne vaneko so tei vayera Dockerfile ko location deko (i.e .   current directory)
+    command: bash -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+    volumes:
+      - .:/app        # mapping or mirroring all files & folders in local computer to the container /app directory
+    ports:
+      - 8000:8000       # : vanda left side ko 8000 port vaneko local computer ko 8000 port ho, and : vanda right side ko 8000 port vaneko local computer ko 8000 port ho
+    depends_on:
+      - db              # app service depends on database or db service
+    restart: always
+
+

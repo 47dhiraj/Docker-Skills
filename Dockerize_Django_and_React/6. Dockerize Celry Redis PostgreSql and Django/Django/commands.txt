@@ -1,0 +1,4 @@
+docker-compose up
+
+
+# yo mathi ko single command le docker-compose build and docker-compose run  command ko kam garcha

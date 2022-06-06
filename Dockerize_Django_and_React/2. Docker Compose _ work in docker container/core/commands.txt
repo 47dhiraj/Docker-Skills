@@ -1,0 +1,5 @@
+#1st> To build an image in docker compose:
+docker-compose build
+
+#2nd> To build, re(creates), starts and ataches to containers for a service:
+docker-compose up

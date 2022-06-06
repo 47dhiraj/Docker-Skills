@@ -1,0 +1,23 @@
+# Commands
+# commands for installing all requirements
+==>pip install fastapi fastapi-sqlalchemy pydantic alembic psycopg2 uvicorn python-dotenv
+
+
+# Yo tala ko 3 ta command alembic ko lagi ho
+
+#1st> Initialize alembic by the name of alembic folder
+==> alembic init alembic
+& yo command hani sake pachi alembic folder bancha and tes vitra env.py file huncha tesma gayera code haru thapna parcha
+
+#2nd> command for creating new migrations (i.e django ma, makemigrations vane jastai ho)
+docker-compose run app alembic revision --autogenerate -m "New Migration"
+
+#3rd> command for doing actual migrate to database (i.e django ma, migrate vane jastai ho )
+docker-compose run app alembic upgrade head
+
+
+# command for building the Docker Image
+==> docker-compose build        
+
+# Best Command : single one shot command for dockerizing the application
+==> docker-compose up

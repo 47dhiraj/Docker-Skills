@@ -1,0 +1,19 @@
+Command for creating React Application
+npx create-react-app my_app
+
+
+# YO talako 2 ta commands for while using Dockerfile to build image
+
+#1 > This command is going to build an image named react, with help of Dockerfile
+docker build --tag react .
+
+#2 > For starting the container in 3000 port
+docker run --publish 3000:3000 react
+
+
+# yo talako command while using docker-compose.yml file & Dockerfile for building image
+#1 > For building the image
+docker-compose build
+
+#2 > Building, creating and starting the container.
+docker-compose up

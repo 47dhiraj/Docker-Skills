@@ -1,0 +1,24 @@
+version: "3.8"                      # version of docker compose
+
+services:                           # jati ota multiple service banincha, teti ota independent or isolated container banera run huncha
+
+  myblog:                           # yo chai react app ko lagi service ho
+    build: ./myblog                 # Docker image banauna ko lagi Dockerfile ko path diyeko
+    container_name: myblog_c        # container lai name diyeko... aafulai j man lagcha tei diye huncha
+    ports:
+      - '3000:3000'                 # local computer ma react app chalne default port and container batw react app hune port lai yesari mention gareko 
+    # volumes:                      # linux or mac ma chai volumes le kaam garcha, but windows ma there is issue
+    #   - /myblog:/app
+    #   - ./app/node_modules
+    stdin_open: true                # starts the container in Interactive Mode (i.e we are connected with the terminal and our react app won't automatically shut down)
+    tty: true                       # starts the container in Interactive Mode (i.e we are connected with the terminal and our react app won't automatically shut down)
+
+  # api:                            # yesari aru multiple services haru pani run garna sakincha    
+  #   build: ./api
+  #   container_name: api_c
+  #   ports:
+  #     - '4000:4000'
+  #   volumes:
+  #     - ./api:/app
+  #     - ./app/node_modules
+

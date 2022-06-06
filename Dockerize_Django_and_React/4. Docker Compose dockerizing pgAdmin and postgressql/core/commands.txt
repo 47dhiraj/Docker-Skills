@@ -1,0 +1,17 @@
+#1st> To download image, build, re(creates), starts and ataches to containers for a service:
+# and also if u delete the container, then again to build the container u have to run this single command.
+docker-compose up
+
+
+## For 2nd and 3rd step: Open the another command prompt 
+
+#2nd> foloowing command dockers ps means “Process Status”, so docker ps basically shows all of the Docker processes actively running. docker ps lists all containers that are up and running:
+docker ps
+
+#3rd> Inspecting the particular container to get the IP address of that postgresql_db container:
+docker inspect container_number
+After this, copy the IP address of the postgresql_db continer and assign that ip address in pgdmin4 UI connection part, while adding the New Server.
+
+
+Either follow the step 2 and 3 or skip 2 & 3 and directly go to docker-compose.yml file and view the postgresql_db container ipv4 address and paste it in while adding the new server.
+

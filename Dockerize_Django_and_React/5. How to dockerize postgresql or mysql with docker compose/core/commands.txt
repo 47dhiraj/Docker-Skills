@@ -1,0 +1,14 @@
+#1st> To build an image in docker compose:
+docker-compose build
+
+
+#2nd > 
+docker-compose run --rm app django-admin startproject core .
+
+
+#3rd> To build, re(creates), starts and ataches to containers for a service:
+docker-compose up
+
+
+#4th > Command for opening bash terminal in one of the recently created container (e.g: django_container)
+docker exec -it django_container /bin/bash

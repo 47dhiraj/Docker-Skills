@@ -1,0 +1,48 @@
+version: "3.8"                                            # version of docker compose
+
+# yo tala mention gareko sabbai services haru  python Image ma run huncha which is mentioned in dockerfile
+services:                                                 # docker compose file ma thuprai services haru define garincha
+    django:                                    # yesari django services ko detail lekhiyo
+        build: .                                          # build . ko matlab Dockerfile current directory ma cha vanne bujaucha, yedi Dockerfile ko help liyera build garne vaneko
+        container_name: django                            # container lai name diyeko
+        command: python manage.py runserver 0.0.0.0:8000  #  container create vai sake pachi django server chai container ko port 8000 ma run vai rakhos vanna ko lagi ho
+        volumes:
+            - .:/usr/src/app/                             # local computer ko current directory lai container ko usr/src/app/ vanni directory sanga mapping gareko
+        ports:
+            - "8000:8000"                                 # local computer ko port and container ko port pani same rakheko
+        environment:
+            - DEBUG=1                                     # Django project develop garda DEBUG=True gareko ho
+            - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+            - CELERY_BROKER=redis://redis:6379/0          # redis le use garne default port 6379 ho
+            - CELERY_BACKEND=redis://redis:6379/0 
+        depends_on:
+            - pgdb                                        # yo django service chai pgdb i.e postgresql ma depend garcha vaneko ho
+            - redis                                       # Yo django service chai redis ma depend garcha vaneko ho
+    celery:                                    # Yesari celery service ko detail define gareko 
+        build: .
+        command: celery -A core worker -l INFO            # this command will start the celery tasks inside the core directory, when we run the docker compose file
+        volumes:
+            - .:/usr/src/app                              # mapping computer current directory with usr/src/app/ directory on the container
+        environment:
+            - DEBUG=1                                     # DEBUG=True gareko
+            - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+            - CELERY_BROKER=redis://redis:6379/0
+            - CELERY_BACKEND=redis://redis:6379/0
+        depends_on:
+            - django                                      # yo celery service depends on django 
+            - redis                                       # yo celery service depends on redis
+    pgdb:                                      # yesari postgresql database ko service lai define gareko
+        image: postgres                                   # postgres image lai docker hub batw download garcha
+        container_name: pgdb                              # container ko naam pgdb rakheko
+        environment:
+            - POSTGRES_DB=postgres                        # database ko name
+            - POSTGRES_USER=postgres                      # database ko user name
+            - POSTGRES_PASSWORD=postgres                  # database ko password
+        volumes:
+            - pgdata:/var/lib/postgresql/data/            # computer ko yo current directory ma pgdata vanni data rakhna ko lagi folder automatic banauncha and yehi baneko pgdata folder is mapped to /var/lib/postgresql/data/ on the container
+    redis:                                    # yesari redis ko service lai define gareko
+        image: "redis:alpine"                             # redis lai chai light weight linux o.s ma use garna ko lagi alpine destro ko use gareko
+        
+volumes:                                      # yesari system le use garne volumes haru lai mention garna parcha
+    pgdata:                                               # pgdata vanni volumes banauchau so tei vayera mention gardi rakheko                                          
+
