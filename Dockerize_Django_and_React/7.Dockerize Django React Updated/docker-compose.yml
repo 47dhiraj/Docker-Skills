@@ -1,0 +1,62 @@
+version: "3.8"
+services:
+
+  react_app:                         
+    build:
+      context: ./frontend
+    container_name: react_app_c
+    ports:
+      - '3000:3000'
+    volumes:                      
+      - ./frontend:/react_app
+      - /react_app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true  
+    stdin_open: true         
+
+  db:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: user
+      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: sumangal
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+  
+  app:
+    build: ./backend
+    command:
+      - /bin/bash
+      - -c
+      - |
+        python manage.py makemigrations
+        python manage.py migrate
+        python manage.py runserver 0.0.0.0:8000
+    expose:
+      - 8000
+    ports:
+      - "8000:8000"
+    environment:
+    - DEBUG=1
+    - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - db
+  
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - '8077:80'
+    environment:
+      - PMA_HOST=db
+    restart: always
+    depends_on:
+      - db
+
+volumes:
+  mysql_data:
