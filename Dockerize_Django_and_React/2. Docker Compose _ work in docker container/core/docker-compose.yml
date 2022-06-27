@@ -1,11 +1,56 @@
 version: "3.8"
 services:
+
+  db:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: user
+      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: testdb
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+
   app:
     build: .
     volumes:
       - .:/django
+    expose:
+      - 8000
     ports:
-      - 8000:8000
+      - "8000:8000"
     image: app:django
     container_name: django_container
-    command: python manage.py runserver 0.0.0.0:8000
+    command:
+      - /bin/bash
+      - -c
+      - |
+        python manage.py makemigrations
+        python manage.py migrate
+        python manage.py runserver 0.0.0.0:8000
+    environment:
+      - DEBUG=1
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+    depends_on:
+      - db
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: pma_container
+    ports:
+      - '8077:80'
+    environment:
+      - PMA_HOST=db
+    restart: always
+    depends_on:
+      - db
+    links:
+      - db
+
+volumes:
+  mysql_data:
+
+  
