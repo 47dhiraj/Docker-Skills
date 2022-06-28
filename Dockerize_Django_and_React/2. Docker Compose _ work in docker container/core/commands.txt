@@ -1,5 +1,15 @@
-#1st> To build an image in docker compose:
-docker-compose build
+#1> Single command to build download and build image, build container & volumes, and also run the container:
+==> docker-compose up
 
-#2nd> To build, re(creates), starts and ataches to containers for a service:
-docker-compose up
+#2> To build the container and run it, even though the container already exists
+==> docker-compose up --build
+
+#3> To open/run the docker container in the detach mode
+==> docker-compose up -d 
+
+#4> To build and run container in the detach mode
+==> docker-compose up --build -d
+
+#5> To remove/delete the containers
+==> docker-compose down 
+
