@@ -1,3 +1,5 @@
 mysql_data
 postgres_data
 pgadmin_data
+.idea/*
+.idea/
